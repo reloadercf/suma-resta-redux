@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Redux</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.min.js">
+
+    </script>
+  </head>
+    <body>
+      <div>
+        <h4>Redux</h4>
+      </div>
+      <div>
+        <p>El número es:<span style="font-weight: bold" id="numero"></span>
+        </p>
+        <br>
+        <button type="button" onclick="aumentar()"> Sumar 1</button>
+        <br>
+        <button type="button" onclick="disminuir()">Disminuir 1</button>
+      </div>
+      <script type="text/javascript">
+        console.log("Funcionando desde JS")
+//un objeto en javascript es un conjunto de claves y valores
+
+
+        //1 state objeto de javascript
+        let state={
+          numero:0
+        }
+
+        //2 la STORE es la que nos da diversos elementos y hace que un objeto (state) se convierta en la informacion de la aplicacion
+        //toma dos parametros un reducer y un state
+        var store = Redux.createStore(reducer, state);
+
+
+        //3 Reducer  es una funcion que tiene un return de un state... el reducer toma una action y el objeto
+        function reducer(state,action){
+          console.log('se ejecuta el reducer...');
+          //console.log(state);
+          // console.log(action);
+          // console.log(nuevoState);
+          let nuevoState=Object.assign({},state);
+
+          switch (action.type) {
+            case 'AUM':
+              nuevoState.numero=state.numero+1;
+              console.log(nuevoState);
+              console.log(state);
+              return nuevoState;
+            case 'DIS':
+              nuevoState.numero=state.numero-1;
+              console.log(nuevoState);
+              console.log(state);
+              return nuevoState;
+            default:
+              return state;
+          }
+
+
+        }
+
+        //4 un ation es un objeto de javascritp con la caracteristica que necesita un KEY(llave) con la deniminacion type
+        let actionAumentar={
+          type:'AUM'
+        }
+
+        let actionDisminuir={
+          type:'DIS'
+        }
+        //las acciones a travez de un dispatch le envian a la store la store al reducer, el reducer envia el state y la accion correspondiente
+        //El reducer ejecuta una logica y modifica el state o regresa el state
+
+        //5 dispatch (como ejecutamos las acciones) lo optenemos a traves de la store y toma una accion
+        //store.dispatch(actionAumentar);
+
+        //funcion para aumentar llamada en el boton
+        var aumentar = function(){
+          store.dispatch(actionAumentar)
+        }
+
+        //Funcion para disminuir
+        var disminuir = function(){
+          store.dispatch(actionDisminuir);
+        }
+
+        //6 getState de la stor para imprimir una sola vez
+        //numero span
+        var numeroSpan = document.getElementById('numero');
+        numero.innerHTML= store.getState().numero;
+
+        // se crea una funcion para actualizar los datos por que el innerHTML anterior solo se ejecuta una travez
+        //cada que se presione el botton de sumar o restar se ejecutara la siguiente Funcion
+        //la funcion la vamos a llamar
+        var actualizarNumero = function(){
+            var numeroSpan = document.getElementById('numero');
+            numero.innerHTML= store.getState().numero;
+        }
+
+        //7 suscribir la funcion cada que se modifique un valor del state ejecuta la siguiente Funcion
+        store.subscribe(actualizarNumero);
+
+
+      </script>
+
+    </body>
+</html>
